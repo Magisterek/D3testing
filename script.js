@@ -4,4 +4,4 @@ let text = d3.select("body")
     .data(tablica)
     .text((d)=>"Wcześniej istniejący akapit " +d)
     .enter().append("p")
-    .text((d)=>"Wygenerowany akapit " + d);
+    .text((d)=>"aaa " + d);
