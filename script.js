@@ -1,7 +1,6 @@
-var tablica = [0, 5, 1, 6, 2];
-let text = d3.select("body")
-    .selectAll("p")
-    .data(tablica)
-    .text((d)=>"Wcześniej istniejący akapit " +d)
-    .enter().append("p")
-    .text((d)=>"aaa " + d);
+var dane = [];
+let text = d3.select("#pojemnik")
+    .selectAll("div")
+    .data(dane)
+    .enter()
+    .append("div")
