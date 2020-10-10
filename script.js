@@ -1,13 +1,12 @@
 "use strict";
-let barWidth = 15;
-let barSpace = 5;
-let svgWidth = barWidth + barSpace * data.length - barSpace;
-let svgHeight = 50;
-let dataMin = d3.min(data, d => d["votes"]);
+let barWidth = 50;
+let barSpace = 10;
+let svgWidth = (barWidth + barSpace) * data.length - barSpace;
+let svgHeight = 700;
 let dataMax = d3.max(data, d => d["votes"]);
-let scale = d3.scale.linear()
-    .domain(dataMin, dataMax)
-    .range(0, 50);
+let scale = d3.scaleLinear()
+    .domain([0, dataMax])
+    .range([0, svgHeight]);
 let svg = d3.select("body").append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight);
@@ -16,3 +15,6 @@ svg.selectAll("rect")
     .enter()
     .append("rect")
     .attr("width", barWidth)
+    .attr("height", d => scale(d["votes"]))
+    .attr("x", (d, i) => (barWidth+barSpace)*i)
+    .attr("y", d => svgHeight-scale(d["votes"]));
