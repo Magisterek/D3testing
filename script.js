@@ -9,7 +9,7 @@ const magia = data => {
 
     const yScale = d3.scaleBand()
         .domain(data.map(d => d.country))
-        .range(0, height);
+        .range([0, height]);
 
     svg.selectAll('rect').data(data)
         .enter().append('rect')
