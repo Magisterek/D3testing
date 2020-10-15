@@ -7,8 +7,12 @@ const width = +svg.attr('width');
 const height = +svg.attr('height');
 
 function magia(data){
-    const xValue = d => d['inflacja'];
-    const yValue = d => d.rok;
+    function xValue(d){
+        return d['inflacja'];
+    }
+    function yValue(d){
+        return d.rok;
+    }
     const margin = { top: 100, right: 40, bottom: 77, left: 150 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
@@ -25,8 +29,7 @@ function magia(data){
     const g = svg.append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    const xAxisTickFormat = number =>
-        d3.format("%")(number)
+    const xAxisTickFormat = d3.format("%");
 
     const xAxis = d3.axisBottom(xScale)
         .tickFormat(xAxisTickFormat)
