@@ -1,0 +1,30 @@
+body {
+    overflow: hidden;
+}
+
+rect {
+    fill: darkorange;
+}
+
+text {
+    font-family: fantasy;
+}
+
+.tick text {
+    font-size: 2.7em;
+    fill: red;
+}
+
+.tick line {
+    stroke: blueviolet;
+}
+
+.dolny {
+    font-size: 5em;
+    fill: blueviolet;
+}
+
+.tytul {
+    font-size: 3.2em;
+    fill: blueviolet;
+}

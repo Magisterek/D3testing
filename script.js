@@ -1,32 +1,69 @@
+const tytul = 'Inflacja w Polsce';
+const dolnyTekst= 'Procent';
+
 const svg = d3.select('svg');
+
 const width = +svg.attr('width');
 const height = +svg.attr('height');
 
 const magia = data => {
-    const  xScale = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.population)])
-        .range([0, width]);
+    const xValue = d => d['inflacja'];
+    const yValue = d => d.rok;
+    const margin = { top: 100, right: 40, bottom: 77, left: 150 };
+    const innerWidth = width - margin.left - margin.right;
+    const innerHeight = height - margin.top - margin.bottom;
+
+    const xScale = d3.scaleLinear()
+        .domain([0, d3.max(data, xValue)])
+        .range([0, innerWidth]);
 
     const yScale = d3.scaleBand()
-        .domain(data.map(d => d.country))
-        .range([0, height]);
+        .domain(data.map(yValue))
+        .range([0, innerHeight])
+        .padding(0.1);
 
-    svg.selectAll('rect').data(data)
+    const g = svg.append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const xAxisTickFormat = number =>
+        d3.format("%")(number)
+
+    const xAxis = d3.axisBottom(xScale)
+        .tickFormat(xAxisTickFormat)
+        .tickSize(-innerHeight);
+
+    g.append('g')
+        .call(d3.axisLeft(yScale))
+        .selectAll('.domain, .tick line')
+        .remove();
+
+    const xAxisG = g.append('g').call(xAxis)
+        .attr('transform', `translate(0,${innerHeight})`);
+
+    xAxisG.select('.domain').remove();
+
+    g.append('text')
+        .attr('class', 'tytul')
+        .attr('y', -30)
+        .text(tytul);
+
+    xAxisG.append('text')
+        .attr('class', 'dolny')
+        .attr('y', 75)
+        .attr('x', innerWidth / 2)
+        .text(dolnyTekst);
+
+    g.selectAll('rect').data(data)
         .enter().append('rect')
-        .attr('y', d=> yScale(d.country))
-        .attr('width',d => xScale(d.population))
-        .attr('height',yScale.bandwidth())
-        .attr('fill','orange');
+        .attr('y', d => yScale(yValue(d)))
+        .attr('width', d => xScale(xValue(d)))
+        .attr('height', yScale.bandwidth());
 };
 
 d3.csv('data.csv').then(data => {
     data.forEach(d => {
-        d.population = +d.population *1000;
-    })
+        d.inflacja = +d.inflacja;
+
+    });
     magia(data);
 });
-
-
-
-
-
