@@ -6,9 +6,13 @@ const svg = d3.select('svg');
 const width = +svg.attr('width');
 const height = +svg.attr('height');
 
-const magia = data => {
-    const xValue = d => d['inflacja'];
-    const yValue = d => d.rok;
+function magia(data){
+    function xValue(d){
+        return d['inflacja'];
+    }
+    function yValue(d){
+        return d.rok;
+    }
     const margin = { top: 100, right: 40, bottom: 77, left: 150 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
@@ -25,8 +29,7 @@ const magia = data => {
     const g = svg.append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    const xAxisTickFormat = number =>
-        d3.format("")(number)
+    const xAxisTickFormat = d3.format("");
 
     const xAxis = d3.axisBottom(xScale)
         .tickFormat(xAxisTickFormat)
@@ -57,12 +60,12 @@ const magia = data => {
         .attr('y', d => yScale(yValue(d)))
         .attr('width', d => xScale(xValue(d)))
         .attr('height', yScale.bandwidth());
-};
+}
 
 d3.csv('data.csv').then(data => {
     data.forEach(d => {
         d.inflacja = +d.inflacja;
 
-    });
+    })
     magia(data);
-});
+})
