@@ -14,7 +14,7 @@ const magia = data => {
     const innerHeight = height - margin.top - margin.bottom;
 
     const xScale = d3.scaleLinear()
-        .domain([0, d3.max(data, xValue)])
+        .domain([-3, d3.max(data, xValue)])
         .range([0, innerWidth]);
 
     const yScale = d3.scaleBand()
@@ -26,12 +26,11 @@ const magia = data => {
         .attr('transform', `translate(${margin.left},${margin.top})`);
 
     const xAxisTickFormat = number =>
-        d3.format("%")(number)
+        d3.format("")(number)
 
     const xAxis = d3.axisBottom(xScale)
         .tickFormat(xAxisTickFormat)
         .tickSize(-innerHeight);
-
     g.append('g')
         .call(d3.axisLeft(yScale))
         .selectAll('.domain, .tick line')
