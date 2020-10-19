@@ -18,10 +18,11 @@ function magia(data){
     const innerHeight = height - margin.top - margin.bottom;
 
     const xScale = d3.scaleLinear()
-        .domain([-3, d3.max(data, xValue)])
-        .range([0, innerWidth]);
+        .domain([-5, d3.max(data, xValue)])
+        .range([0, innerWidth])
+        .d3.nice;
 
-    const yScale = d3.scaleBand()
+    const yScale = d3.scalePoint()
         .domain(data.map(yValue))
         .range([0, innerHeight])
         .padding(0.1);
@@ -34,10 +35,12 @@ function magia(data){
     const xAxis = d3.axisBottom(xScale)
         .tickFormat(xAxisTickFormat)
         .tickSize(-innerHeight);
+
+    const yAxis = d3.axisLeft(yScale)
+        .tickSize(-innerWidth)
+
     g.append('g')
-        .call(d3.axisLeft(yScale))
-        .selectAll('.domain, .tick line')
-        .remove();
+        .call(yAxis)
 
     const xAxisG = g.append('g').call(xAxis)
         .attr('transform', `translate(0,${innerHeight})`);
@@ -55,11 +58,11 @@ function magia(data){
         .attr('x', innerWidth / 2)
         .text(dolnyTekst);
 
-    g.selectAll('rect').data(data)
-        .enter().append('rect')
-        .attr('y', d => yScale(yValue(d)))
-        .attr('width', d => xScale(xValue(d)))
-        .attr('height', yScale.bandwidth());
+    g.selectAll('circle').data(data)
+        .enter().append('circle')
+        .attr('cy', d => yScale(yValue(d)))
+        .attr('cx', d => xScale(xValue(d)))
+        .attr('r', 15);
 }
 
 d3.csv('data.csv').then(data => {
